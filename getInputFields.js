@@ -1,12 +1,12 @@
 var values = [];
 var inputFields = document.getElementsByTagName('input');
 var textFields = document.getElementsByTagName('textarea');
-var saveButton = document.getElementByName('ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id55:j_id56');
+var saveButton = document.getElementsByName('ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id55:j_id56')[0].value;
 
 if(saveButton != null)
 {
 	//saveButton.onclick = function() {window.open('https://www.codexworld.com', '_blank');}
-	console.log("Hurray");
+	saveButton.addEventListener('click', function() { console.log("Button clicked");});
 }
 
 for (var i = 0; i < inputFields.length; i++) {

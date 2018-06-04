@@ -31,7 +31,13 @@
       "matches": ["http://*/*", "https://*/*"],
       "js": ["setTemplate.js"],
       "all_frames": true
-    }],
+    },
+	{
+	  "matches": ["http://*/*", "https://*/*"],
+      "js": ["getInputFields.js"],
+      "all_frames": true
+	}
+	],
   
   
   "manifest_version": 2
