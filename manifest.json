@@ -8,9 +8,6 @@
     "persistent": false
   },
   
-  
-
-  
   "page_action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -33,7 +30,6 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": ["setTemplate.js"],
-      //"run_at": "document_idle",
       "all_frames": true
     }],
   

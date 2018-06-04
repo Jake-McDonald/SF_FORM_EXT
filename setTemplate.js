@@ -6,12 +6,10 @@ var emailTaskSummary = document.getElementById('00N0P000006DxMi');
 if(callWrapSummary != null && commentText != null)
 {
 	callWrapSummary.style.height = "140px";
-	if(callWrapSummary == '')
+	console.log("Call Wrap Summary: " + callWrapSummary.value);
+	if(!!callWrapSummary) //check if field empty
 	{
 		callWrapSummary.value = "T2 Consult\nIB:\nOB:";
-	}
-	if(commentText = '')
-	{
 		commentText.value = "NA";
 	}
 }
@@ -19,7 +17,7 @@ if(callWrapSummary != null && commentText != null)
 if(emailTaskSummary != null)
 {
 	emailTaskSummary.style.height = "140px";
-	if(emailTaskSummary == '')
+	if(!!emailTaskSummary) //check if field empty
 	{
 		emailTaskSummary.value = "T2 Elevation\nIB:\nOB:";
 	}
