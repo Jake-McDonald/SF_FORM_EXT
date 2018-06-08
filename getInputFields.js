@@ -5,7 +5,6 @@ var saveButton = document.getElementsByName('ACT_PostCallUpdateTaskLookups:j_id1
 
 if(saveButton != null)
 {
-	//saveButton.onclick = function() {window.open('https://www.codexworld.com', '_blank');}
 	saveButton.addEventListener('click', function() { console.log("Button clicked");});
 }
 
