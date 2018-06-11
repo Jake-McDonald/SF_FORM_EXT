@@ -4,7 +4,7 @@ var emailTaskSummary;
 
 chrome.runtime.sendMessage({command: "getSalesforceFields"},
     function(response) {
-        //console.log(response.callWrapSummary);
+        console.log("Received message " + response.callWrapSummary);
     }
 )
 
