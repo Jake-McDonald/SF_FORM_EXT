@@ -1,7 +1,7 @@
 var values = [];
 var inputFields = document.getElementsByTagName('input');
 var textFields = document.getElementsByTagName('textarea');
-var saveButton = document.getElementsByName('ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id55:j_id56')[0].value;
+var saveButton = document.getElementsByName('ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id55:j_id56')[0];
 
 if(saveButton != null)
 {

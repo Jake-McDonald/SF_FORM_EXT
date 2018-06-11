@@ -14,10 +14,10 @@ chrome.storage.sync.get('color', function(data) {
 changeColor.onclick = function() {
   //let color = element.target.value;
   //chrome.tabs.query({active: true, currentWindow: true}, function) {
-    //chrome.tabs.executeScript(
-	//{file: 'getInputFields.js', allFrames: true} )
+    chrome.tabs.executeScript(
+	{file: '/Content_Scripts/setTemplate.js', allFrames: true} )
 	//chrome.runtime.sendMessage
-	launchForm(formURL);
+
         //{code: 'document.body.style.backgroundColor = "' + color + '";'});
 };
 

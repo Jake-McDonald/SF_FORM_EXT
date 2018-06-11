@@ -4,6 +4,8 @@
 
 'use strict';
 
+var salesforceFields = salesforceFormFields;
+
 chrome.runtime.onInstalled.addListener(function() {
   chrome.storage.sync.set({color: '#3aa757'}, function() {
     console.log('The color is green.');
@@ -18,3 +20,11 @@ chrome.runtime.onInstalled.addListener(function() {
   });
 });
 
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        if (request.command === "getSalesforceFields") {
+            sendResponse(salesforceFields);
+            console.log("Sent response!!!");
+        }
+        else {console.log("No matching command found!")}
+    });
