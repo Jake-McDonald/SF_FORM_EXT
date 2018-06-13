@@ -1,4 +1,3 @@
-//var formFields;
 var callWrapID;
 var commentTextID;
 var emailTaskSummaryID;
@@ -22,16 +21,17 @@ var emailTaskSummary = document.getElementById(emailTaskSummaryID);
 if (callWrapSummary != null && commentText != null) {
     callWrapSummary.style.height = "140px";
     console.log("Call Wrap Summary: " + callWrapSummary.value);
-    if (!!callWrapSummary) //check if field empty
+    if (callWrapSummary.value == "") //check if field empty
     {
         callWrapSummary.value = "T2 Consult\nIB:\nOB:";
         commentText.value = "NA";
     }
 }
 
+//Sets email task summary
 if (emailTaskSummary != null) {
     emailTaskSummary.style.height = "140px";
-    if (!!emailTaskSummary) //check if field empty
+    if (emailTaskSummary.value == "") //check if field empty
     {
         emailTaskSummary.value = "T2 Elevation\nIB:\nOB:";
     }
