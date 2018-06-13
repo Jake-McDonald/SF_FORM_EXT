@@ -5,6 +5,7 @@
 'use strict';
 
 var salesforceFields = salesforceFormFields;
+var googleFields = googleFormFields;
 
 chrome.runtime.onInstalled.addListener(function() {
   chrome.storage.sync.set({color: '#3aa757'}, function() {
