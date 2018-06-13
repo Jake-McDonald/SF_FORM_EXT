@@ -1,40 +1,56 @@
-var values = [];
-var inputFields = document.getElementsByTagName('input');
-var textFields = document.getElementsByTagName('textarea');
-var saveButton = document.getElementsByName('ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id55:j_id56')[0];
+var callWrapID;
+var commentTextID;
+var emailTaskSummaryID;
+var callWrapSaveButton;
+var caseNumber;
+var tierOneAgentName;
+var callResult;
 
-if(saveButton != null)
+chrome.runtime.sendMessage({command: "getSalesforceFields"},
+    function(response) {
+        callWrapID = response.callWrapSummary;
+		commentTextID = response.commentText;
+		emailTaskSummaryID = response.taskSummary;
+		callWrapSaveButton = response.callWrapSaveButton;
+		tierOneAgentName = response.agentName;
+		callResult = response.callResult;
+		caseNumber = response.caseNumber;
+    }
+)
+
+if(callWrapSaveButton != null)
 {
-	saveButton.addEventListener('click', function() { console.log("Button clicked");});
-}
-
-for (var i = 0; i < inputFields.length; i++) {
-	var currentID = inputFields[i].getAttribute('id');
-	if (currentID != null && currentID !== '')
-	{
-		if(currentID == "ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id47:j_id49")
-		{
-				values.push(inputFields[i].getAttribute('id') + ": " + inputFields[i].value);
-		}
-		else if(currentID == "ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id47:j_id50")
-		{
-			values.push(inputFields[i].getAttribute('id') + ": " + inputFields[i].value);
-		}
-	}
-}
-for (var i = 0; i < textFields.length; i++) {
-	var currentID = textFields[i].getAttribute('id');
-	if (currentID != null && currentID !== '')
-	{
-		if(currentID == "ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id47:j_id51")
-		{
-				values.push(textFields[i].getAttribute('id') + ": " + textFields[i].value);
-		}
-		
+	console.log("Save button in call wrap was clicked");
+	caseNotes = getCaseNotes();
+	if(caseNotes != null)
+	{		callWrapSaveButton.addEventListener('click', sendCaseNotesToBackground(caseNotes););
 	}
 }
 
-for(var i = 0; i < values.length; i++)
+function getCaseNotes()
 {
-	console.log(values[i]);
-}
+	var caseNotes =
+	{
+		caseNumber: document.getElementById(caseNumber).value,
+		callWrapNotes: document.getElementById(callWrapID).value,
+		commentText: document.getElementById(commentTextID).value,
+		agentName: document.getElementByID(tierOneAgentName).value,
+		callResult: document.getElementByID(callResult).value
+	}
+	
+	return caseNotes;
+};
+
+
+function sendCaseNotesToBackground(notes)
+{
+	console.log("Sending case notes to background");
+	chrome.runtime.sendMessage(JSON.stringify(notes), 
+		function(response) {
+			console.log("Case notes recieved by background script");
+		}
+	)
+};
+
+	
+	
