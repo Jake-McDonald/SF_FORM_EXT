@@ -1,16 +1,22 @@
-var callWrapSummary;
-var commentText;
-var emailTaskSummary;
+//var formFields;
+var callWrapID;
+var commentTextID;
+var emailTaskSummaryID;
+
 
 chrome.runtime.sendMessage({command: "getSalesforceFields"},
     function(response) {
-        console.log("Received message " + response.callWrapSummary);
+        callWrapID = response.callWrapSummary;
+		commentTextID = response.commentText;
+		emailTaskSummaryID = response.taskSummary;
     }
 )
 
-callWrapSummary = document.getElementById('ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id47:j_id51');
-commentText = document.getElementById('ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id47:j_id52');
-emailTaskSummary = document.getElementById('00N0P000006DxMi');
+
+var callWrapSummary = document.getElementById(callWrapID);
+var commentText = document.getElementById(commentTextID);
+var emailTaskSummary = document.getElementById(emailTaskSummaryID);
+
 
 //Set call wrap 
 if (callWrapSummary != null && commentText != null) {
