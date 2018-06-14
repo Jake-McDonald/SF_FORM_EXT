@@ -4,7 +4,7 @@
   "description": "Build an Extension!",
   "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "http://*/*", "https://*/*"],
   "background": {
-    "scripts": ["/Form_Field_Config/salesforceFormFields.js","/Background/background.js", "/Form_Field_Config/trackerFields.js"],
+    "scripts": ["/Form_Field_Config/salesforceFormFields.js", "/Form_Field_Config/trackerFields.js", "/Background/background.js"],
     "persistent": false
   },
   
