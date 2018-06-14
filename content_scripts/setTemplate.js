@@ -5,25 +5,28 @@ var emailTaskSummaryID;
 
 chrome.runtime.sendMessage({command: "getSalesforceFields"},
     function(response) {
-        callWrapID = response.callWrapSummary;
-		commentTextID = response.commentText;
-		emailTaskSummaryID = response.taskSummary;
+        if(response != null) {
+            callWrapID = response.callWrapSummary;
+            commentTextID = response.commentText;
+            emailTaskSummaryID = response.taskSummary;
+            console.log("Received Salesforce field IDs");
+        }
     }
 )
 
 
-var callWrapSummary = document.getElementById(callWrapID);
+var wrapSummary = document.getElementById(callWrapID);
 var commentText = document.getElementById(commentTextID);
 var emailTaskSummary = document.getElementById(emailTaskSummaryID);
 
 
 //Set call wrap 
-if (callWrapSummary != null && commentText != null) {
-    callWrapSummary.style.height = "140px";
-    console.log("Call Wrap Summary: " + callWrapSummary.value);
-    if (callWrapSummary.value == "") //check if field empty
+if (wrapSummary != null && commentText != null) {
+    wrapSummary.style.height = "140px";
+    console.log("Call Wrap Summary: " + wrapSummary.value);
+    if (wrapSummary.value == "") //check if field empty
     {
-        callWrapSummary.value = "T2 Consult\nIB:\nOB:";
+        wrapSummary.value = "T2 Consult\nIB:\nOB:";
         commentText.value = "NA";
     }
 }

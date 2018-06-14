@@ -5,7 +5,7 @@
 'use strict';
 
 var salesforceFields = salesforceFormFields;
-var googleFields = googleFormFields;
+//var trackerFieldsIDs = trackerFields;
 
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     chrome.declarativeContent.onPageChanged.addRules([{
@@ -15,7 +15,6 @@ var googleFields = googleFormFields;
       actions: [new chrome.declarativeContent.ShowPageAction()]
     }]);
   });
-});
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
