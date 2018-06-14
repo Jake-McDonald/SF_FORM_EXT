@@ -5,7 +5,7 @@
 'use strict';
 
 var salesforceFields = salesforceFormFields;
-//var trackerFieldsIDs = trackerFields;
+var trackerFieldsIDs = trackerFields;
 
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     chrome.declarativeContent.onPageChanged.addRules([{
