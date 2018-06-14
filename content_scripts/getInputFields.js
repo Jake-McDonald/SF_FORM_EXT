@@ -46,7 +46,7 @@ function getCaseNotes()
 function sendCaseNotesToBackground(notes)
 {
     console.log("Sending case notes to background");
-    chrome.runtime.sendMessage(JSON.stringify(notes), 
+    chrome.runtime.sendMessage(notes), 
         function(response) {
             console.log("Case notes received by background script");
         }
