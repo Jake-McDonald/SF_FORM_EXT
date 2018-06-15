@@ -1,53 +1,62 @@
-var callWrapID;
-var commentTextID;
-var emailTaskSummaryID;
-var callWrapSaveButton;
-var caseNumber;
-var tierOneAgentName;
-var callResult;
+console.log("getInputFields script started!")
 
 chrome.runtime.sendMessage({command: "getSalesforceFields"},
-    function(response) {
-        callWrapID = response.callWrapSummary;
-        commentTextID = response.commentText;
-        emailTaskSummaryID = response.taskSummary;
-        callWrapSaveButton = response.callWrapSaveButton;
-        tierOneAgentName = response.agentName;
-        callResult = response.callResult;
-        caseNumber = response.caseNumber;
+    function (response) {
+        setSaveButtonListener(response);
     }
 )
 
-var saveButton = document.getElementById(callWrapSaveButton);
-if(saveButton != null)
-{
-    console.log("Save button in call wrap was clicked");
-    caseNotes = getCaseNotes();
-    if(caseNotes != null)
-    {       saveButton.addEventListener('click', function(){ sendCaseNotesToBackground(caseNotes)});
+function setSaveButtonListener(formIDs) {
+    var saveButton = document.getElementsByName(formIDs.callWrapSaveButton)[0];
+    if (saveButton != null) {
+        console.log("Save button found!");
+        var formElements = getFormElements(formIDs);
+        var caseNotes = getCaseNotes(formElements);
+        if (caseNotes != null) {
+            console.log("Call wrap saver button listener set!");
+            saveButton.addEventListener('click', function () {
+                sendCaseNotesToBackground(caseNotes);
+                console.log("Save button in call wrap was clicked");
+            });
+        }
+        else console.log("Case notes was null");
     }
+    else console.log("Save button was null");
 }
 
-function getCaseNotes()
+function getFormElements(elementIDs)
 {
-    var caseNotes =
+    var formElements =
     {
-        caseNumber: document.getElementById(caseNumber).value,
-        callWrapNotes: document.getElementById(callWrapID).value,
-        commentText: document.getElementById(commentTextID).value,
-        agentName: document.getElementById(tierOneAgentName).value,
-        callResult: document.getElementById(callResult).value
+        callWrapID: elementIDs.callWrapSummary,
+        commentTextID: elementIDs.commentText,
+        emailTaskSummaryID: elementIDs.taskSummary,
+        callWrapSaveButtonID: elementIDs.callWrapSaveButton,
+        tierOneAgentNameID: elementIDs.agentName,
+        callResultID: elementIDs.callResult,
+        caseNumberID: elementIDs.caseNumber
     }
-    
+    return formElements;
+}
+
+function getCaseNotes(formFields) {
+    var caseNotes =
+        {
+            caseNumber: document.getElementById(formFields.caseNumberID).value,
+            callWrapNotes: document.getElementById(formFields.callWrapID).value,
+            commentText: document.getElementById(formFields.commentTextID).value
+            //tierOneAgentName: document.getElementById(formFields.tierOneAgentNameID).value
+            //callResult: document.getElementById(formFields.callResultID).value
+        }
+
     return caseNotes;
 };
 
 
-function sendCaseNotesToBackground(notes)
-{
+function sendCaseNotesToBackground(notes) {
     console.log("Sending case notes to background");
-    chrome.runtime.sendMessage(notes, 
-        function(response) {
+    chrome.runtime.sendMessage(notes,
+        function (response) {
             console.log("Case notes received by background script");
         }
     )
