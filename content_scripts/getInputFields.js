@@ -42,10 +42,11 @@ function getFormElements(elementIDs)
 function getCaseNotes(formFields) {
     var caseNotes =
         {
+            command: "openTrackerForm",
             caseNumber: document.getElementById(formFields.caseNumberID).value,
             callWrapNotes: document.getElementById(formFields.callWrapID).value,
             commentText: document.getElementById(formFields.commentTextID).value
-            //tierOneAgentName: document.getElementById(formFields.tierOneAgentNameID).value
+            tierOneAgentName: document.getElementById(formFields.tierOneAgentNameID).value
             //callResult: document.getElementById(formFields.callResultID).value
         }
 
