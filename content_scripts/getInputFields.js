@@ -45,8 +45,8 @@ function getCaseNotes(formFields) {
             command: "openTrackerForm",
             caseNumber: document.getElementById(formFields.caseNumberID).value,
             callWrapNotes: document.getElementById(formFields.callWrapID).value,
-            commentText: document.getElementById(formFields.commentTextID).value
-            tierOneAgentName: document.getElementById(formFields.tierOneAgentNameID).value
+            commentText: document.getElementById(formFields.commentTextID).value,
+            tierOneAgentName: document.getElementsByName(formFields.tierOneAgentNameID)[0].value
             //callResult: document.getElementById(formFields.callResultID).value
         }
 
