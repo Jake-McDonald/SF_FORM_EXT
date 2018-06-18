@@ -1,5 +1,11 @@
 var salesforceFormFields;
 salesforceFormFields = {
+    /*
+    *This file needs to be updated any time that the tracker changes. You can obtain the field IDs by 
+    *making a pre-filled URL on the Google Form. You need to have access to edit the form to make
+    *a pre-filled URL.
+    */
+    
     //Call Wrap window fields
     "agentName": "ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id47:j_id49",
     "caseNumber": "ACT_PostCallUpdateTaskLookups:j_id19:j_id20:j_id47:j_id50",

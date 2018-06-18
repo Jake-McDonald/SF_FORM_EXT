@@ -1,7 +1,9 @@
 'use strict';
-let formURL = "https://docs.google.com/forms/d/e/1FAIpQLScUdkxnCW0OES8BQkItvnpQ_oOYhjdSHFA4bE4Oo1cIxB55vw/viewform";
+
+//These variables are pulled from salesforceFields.js in form_field_config
 var salesforceFields = salesforceFormFields;
 var trackerFieldsIDs = trackerFields;
+var formURL = trackerFieldsIDs.trackerURL; 
 
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     chrome.declarativeContent.onPageChanged.addRules([{
@@ -20,15 +22,40 @@ chrome.runtime.onMessage.addListener(
         }
         else if(request.command === "openTrackerForm")
         {
+            var prefilledURL = createFormURL(request);
+            launchForm(prefilledURL);
             console.log("Tracker form opened");
+            console.log("URL created: " + prefilledURL);
         }
         else {console.log("No matching command found!")}
     });
-function createFormUrl(caseNotes)
+function createFormURL(caseNotes)
 {
+    var prefilledURL = formURL;
+    var entries = [];
+    entries.push(trackerFields.tierOneName + "=" + caseNotes.agentName);
+    entries.push(trackerFields.caseNumber + "=" + caseNotes.caseNumber);
+    
+    //Split the call wrap summary into inquiry and actions taken
+    var templateRegex = /(?:IB:)([\w\s]+)(?:OB:)([\w\s]+)/g;
+    var summarySplit = templateRegex.exec(caseNotes.callWrapNotes);
+    var agentInquiry = summarySplit[1];
+    var tierTwoActionsTaken = summarySplit[2];
+    var agentInquiryFormatted = agentInquiry.split(' ').join('+');
+    var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
+    
+    entries.push(trackerFields.agentInquiry + "=" + agentInquiryFormatted);
+    entries.push(trackerFields.tierTwoActionsTaken + "=" + tierTwoActionsTakenFormatted);
+    
+    for(var i = 0; i < entries.length; i++)
+    {
+        prefilledURL += "&" + entries[i];
+    }
+    
+    return prefilledURL;
 }
 
 
 let launchForm = function(formUrl) {
-	chrome.tabs.create({ url: formUrl });
+    chrome.tabs.create({ url: formUrl });
 }

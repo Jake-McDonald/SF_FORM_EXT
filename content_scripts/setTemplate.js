@@ -1,5 +1,7 @@
 'use strict;'
 
+var summaryHeight = "140px";
+
 chrome.runtime.sendMessage({command: "getSalesforceFields"},
     function(response) {
         console.log("Sent request to background script for Salesforce field IDs");
@@ -19,7 +21,7 @@ function setTemplates(formElements)
 {
     //Set call wrap 
     if (formElements.callWrapSummary !== null && formElements.commentText !== null) {
-        formElements.callWrapSummary.style.height = "140px";
+        formElements.callWrapSummary.style.height = summaryHeight;
         if (formElements.callWrapSummary.value === "") //check if field empty
         {
             formElements.callWrapSummary.value = "T2 Consult\nIB:\nOB:";
@@ -31,7 +33,7 @@ function setTemplates(formElements)
 
     //Sets email task summary
     if (formElements.emailTaskSummary !== null) {
-        formElements.emailTaskSummary.style.height = "140px";
+        formElements.emailTaskSummary.style.height = summaryHeight;
         if (formElements.emailTaskSummary.value === "") //check if field empty
         {
             formElements.emailTaskSummary.value = "T2 Elevation\nIB:\nOB:";
