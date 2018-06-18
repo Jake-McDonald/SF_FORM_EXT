@@ -1,41 +1,41 @@
 'use strict;'
 
-var callWrapID;
-var commentTextID;
-var emailTaskSummaryID;
-
 chrome.runtime.sendMessage({command: "getSalesforceFields"},
     function(response) {
+        console.log("Sent request to background script for Salesforce field IDs");
         if(response !== null) {
-            callWrapID = response.callWrapSummary;
-            commentTextID = response.commentText;
-            emailTaskSummaryID = response.taskSummary;
+            var formElements = {
+                callWrapSummary: document.getElementById(response.callWrapSummary),
+                commentText: document.getElementById(response.commentText),
+                emailTaskSummary: document.getElementById(response.taskSummary)
+            };
             console.log("Received Salesforce field IDs");
+            setTemplates(formElements);
         }
     }
 )
 
-var wrapSummary = document.getElementById(callWrapID);
-var commentText = document.getElementById(commentTextID);
-var emailTaskSummary = document.getElementById(emailTaskSummaryID);
-
-
-//Set call wrap 
-if (wrapSummary !== null && commentText !== null) {
-    wrapSummary.style.height = "140px";
-    console.log("Call Wrap Summary: " + wrapSummary.value);
-    if (wrapSummary.value === "") //check if field empty
-    {
-        wrapSummary.value = "T2 Consult\nIB:\nOB:";
-        commentText.value = "NA";
+function setTemplates(formElements)
+{
+    //Set call wrap 
+    if (formElements.callWrapSummary !== null && formElements.commentText !== null) {
+        formElements.callWrapSummary.style.height = "140px";
+        if (formElements.callWrapSummary.value === "") //check if field empty
+        {
+            formElements.callWrapSummary.value = "T2 Consult\nIB:\nOB:";
+            formElements.commentText.value = "NA";
+            console.log("Set call template");
+        }
+        
     }
-}
 
-//Sets email task summary
-if (emailTaskSummary !== null) {
-    emailTaskSummary.style.height = "140px";
-    if (emailTaskSummary.value === "") //check if field empty
-    {
-        emailTaskSummary.value = "T2 Elevation\nIB:\nOB:";
+    //Sets email task summary
+    if (formElements.emailTaskSummary !== null) {
+        formElements.emailTaskSummary.style.height = "140px";
+        if (formElements.emailTaskSummary.value === "") //check if field empty
+        {
+            formElements.emailTaskSummary.value = "T2 Elevation\nIB:\nOB:";
+            console.log("Set email template"); 
+        }
     }
-}
+};
