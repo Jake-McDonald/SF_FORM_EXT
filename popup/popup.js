@@ -4,23 +4,20 @@
 
 'use strict';
 let formURL = "https://docs.google.com/forms/d/e/1FAIpQLScUdkxnCW0OES8BQkItvnpQ_oOYhjdSHFA4bE4Oo1cIxB55vw/viewform";
-let changeColor = document.getElementById('changeColor');
 
-chrome.storage.sync.get('color', function(data) {
-  changeColor.style.backgroundColor = data.color;
-  changeColor.setAttribute('value', data.color);
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("testButton").addEventListener("click", sendCallInfoToBackground);
 });
-
-changeColor.onclick = function() {
-  //let color = element.target.value;
-  //chrome.tabs.query({active: true, currentWindow: true}, function) {
-    chrome.tabs.executeScript(
-	{file: '/content_scripts/testURLCreation.js'} )
-	//chrome.runtime.sendMessage
-
-        //{code: 'document.body.style.backgroundColor = "' + color + '";'});
-};
 
 let launchForm = function(formUrl) {
 	chrome.tabs.create({ url: formUrl });
+}
+
+function sendCallNotesToBackground()
+{
+    chrome.tabs.query({currentWindow: true, active: true}, function (tabs){
+        var activeTab = tabs[0];
+        chrome.tabs.sendMessage(activeTab.id, {"message": "sendCallInfoToBackground"})
+        };
+    )
 }

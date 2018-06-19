@@ -1,58 +1,70 @@
 console.log("getInputFields script started!")
 
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+    if(message.command == "sendCallInfoToBackground")
+    {   
+        sendResponse({"message": "Message received by getInputFields"});
+        chrome.runtime.sendMessage({command: "getSalesforceFields"},
+            function (response) {
+                var notes = getCaseNotes(response);
+                if (notes !== undefined) {
+                    
+                    sendCaseNotesToBackground(notes);
+                }
+                else
+                {
+                    console.log("Not a call wrap frame");
+                }
+            }
+        )
+    }
+});
+
 chrome.runtime.sendMessage({command: "getSalesforceFields"},
     function (response) {
-        setSaveButtonListener(response);
+        var notes = getCaseNotes(response);
+        if (notes !== undefined) {
+            
+            setSaveButtonListener(response, notes);
+        }
+        else
+        {
+            console.log("Not a call wrap frame");
+        }
     }
 )
 
-function setSaveButtonListener(formIDs) {
-    var saveButton = document.getElementsByName(formIDs.callWrapSaveButton)[0];
-    if (saveButton != null) {
-        console.log("Save button found!");
-        var formElements = getFormElements(formIDs);
-        var caseNotes = getCaseNotes(formElements);
-        if (caseNotes != null) {
-            console.log("Call wrap saver button listener set!");
-            saveButton.addEventListener('click', function () {
-                sendCaseNotesToBackground(caseNotes);
-                console.log("Save button in call wrap was clicked");
-            });
-        }
-        else console.log("Case notes was null");
-    }
-    else console.log("Save button was null");
-}
-
-function getFormElements(elementIDs)
-{
-    var formElements =
-    {
-        callWrapID: elementIDs.callWrapSummary,
-        commentTextID: elementIDs.commentText,
-        emailTaskSummaryID: elementIDs.taskSummary,
-        callWrapSaveButtonID: elementIDs.callWrapSaveButton,
-        tierOneAgentNameID: elementIDs.agentName,
-        callResultID: elementIDs.callResult,
-        caseNumberID: elementIDs.caseNumber
-    }
-    return formElements;
+function setSaveButtonListener(formIDs, caseNotes) {
+   var saveButton = document.getElementsByName(formIDs.callWrapSaveButton)[0];
+   saveButton.addEventListener('click', function () {
+       sendCaseNotesToBackground(caseNotes);
+       console.log("Save button in call wrap was clicked");
+   })
+    console.log("Call wrap saver button listener set!");
 }
 
 function getCaseNotes(formFields) {
-    var caseNotes =
-        {
-            command: "openTrackerForm",
-            caseNumber: document.getElementById(formFields.caseNumberID).value,
-            callWrapNotes: document.getElementById(formFields.callWrapID).value,
-            commentText: document.getElementById(formFields.commentTextID).value,
-            tierOneAgentName: document.getElementsByName(formFields.tierOneAgentNameID)[0].value
-            //callResult: document.getElementById(formFields.callResultID).value
-        }
+    var caseNumberField = document.getElementById(formFields.caseNumberID);
+    var callWrapField = document.getElementById(formFields.callWrapID);
+    var commentField = document.getElementById(formFields.commentTextID);
+    var tierOneAgentName = document.getElementsByName(formFields.tierOneAgentNameID)[0];
+    var saveButton = document.getElementsByName(formFields.callWrapSaveButton)[0];
+    
+    if(caseNumberField && callWrapField && commentField && tierOneAgentName
+        && saveButton)
+    {
+        var caseNotes =
+            {
+                command: "openTrackerForm",
+                caseNumber: document.getElementById(formFields.caseNumberID).value,
+                callWrapNotes: document.getElementById(formFields.callWrapID).value,
+                commentText: document.getElementById(formFields.commentTextID).value,
+                tierOneAgentName: document.getElementsByName(formFields.tierOneAgentNameID)[0].value
+            }
 
-    return caseNotes;
+        return caseNotes;
+    }
 };
-
 
 function sendCaseNotesToBackground(notes) {
     console.log("Sending case notes to background");
