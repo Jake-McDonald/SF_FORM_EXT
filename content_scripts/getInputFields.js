@@ -2,8 +2,9 @@ console.log("getInputFields script started!")
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if(message.command == "sendCallInfoToBackground")
-    {   
-        sendResponse({"message": "Message received by getInputFields"});
+    {
+        console.log("Received message from popup!")
+        sendResponse({message: "Message received by getInputFields"});
         chrome.runtime.sendMessage({command: "getSalesforceFields"},
             function (response) {
                 var notes = getCaseNotes(response);
