@@ -45,10 +45,10 @@ function setSaveButtonListener(formIDs, caseNotes) {
 }
 
 function getCaseNotes(formFields) {
-    var caseNumberField = document.getElementById(formFields.caseNumberID);
-    var callWrapField = document.getElementById(formFields.callWrapID);
-    var commentField = document.getElementById(formFields.commentTextID);
-    var tierOneAgentName = document.getElementsByName(formFields.tierOneAgentNameID)[0];
+    var caseNumberField = document.getElementById(formFields.caseNumber);
+    var callWrapField = document.getElementById(formFields.callWrapSummary);
+    var commentField = document.getElementById(formFields.commentText);
+    var tierOneAgentName = document.getElementsByName(formFields.agentName)[0];
     var saveButton = document.getElementsByName(formFields.callWrapSaveButton)[0];
     
     if(caseNumberField && callWrapField && commentField && tierOneAgentName
@@ -57,12 +57,13 @@ function getCaseNotes(formFields) {
         var caseNotes =
             {
                 command: "openTrackerForm",
-                caseNumber: document.getElementById(formFields.caseNumberID).value,
-                callWrapNotes: document.getElementById(formFields.callWrapID).value,
-                commentText: document.getElementById(formFields.commentTextID).value,
-                tierOneAgentName: document.getElementsByName(formFields.tierOneAgentNameID)[0].value
+                caseNumber: document.getElementById(formFields.caseNumber).value,
+                callWrapNotes: document.getElementById(formFields.callWrapSummary).value,
+                commentText: document.getElementById(formFields.commentText).value,
+                tierOneAgentName: document.getElementsByName(formFields.agentName)[0].value
             }
 
+        console.log(document.getElementById(formFields.callWrapSummary).value);
         return caseNotes;
     }
 };

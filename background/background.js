@@ -37,7 +37,7 @@ function createFormURL(caseNotes)
     entries.push(trackerFields.caseNumber + "=" + caseNotes.caseNumber);
     
     //Split the call wrap summary into inquiry and actions taken
-    var templateRegex = /(?:IB:)([\w\s]+)(?:OB:)([\w\s]+)/g;
+    var templateRegex = /(?:IB:)([a-zA-Z0-9,.!? ]*)(?:OB:)([[a-zA-Z0-9,.!? ]*)/g;
     var summarySplit = templateRegex.exec(caseNotes.callWrapNotes);
     var agentInquiry = summarySplit[1];
     var tierTwoActionsTaken = summarySplit[2];
