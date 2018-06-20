@@ -26,7 +26,7 @@ chrome.runtime.sendMessage({command: "getSalesforceFields"},
         var notes = getCaseNotes(response);
         if (notes !== undefined) {
             
-            setSaveButtonListener(response, notes);
+            setSaveButtonListener(response);
         }
         else
         {
@@ -35,9 +35,10 @@ chrome.runtime.sendMessage({command: "getSalesforceFields"},
     }
 )
 
-function setSaveButtonListener(formIDs, caseNotes) {
+function setSaveButtonListener(formIDs) {
    var saveButton = document.getElementsByName(formIDs.callWrapSaveButton)[0];
    saveButton.addEventListener('click', function () {
+       var caseNotes = getCaseNotes(formIDs);
        sendCaseNotesToBackground(caseNotes);
        console.log("Save button in call wrap was clicked");
    })
