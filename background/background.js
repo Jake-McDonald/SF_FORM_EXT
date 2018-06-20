@@ -33,19 +33,35 @@ function createFormURL(caseNotes)
 {
     var prefilledURL = formURL;
     var entries = [];
-    entries.push(trackerFields.tierOneName + "=" + caseNotes.agentName);
+    var agentName = trackerFields.tierOneName + "=" + caseNotes.tierOneAgentName;
+    var agentNameFormatted = agentName.split(' ').join('+');
+    var tierTwoName = trackerFields.tierTwoName + "=" + "Jacob";
+    var tierTwoNameFormatted = tierTwoName.split(' ').join('+');
+    entries.push(agentNameFormatted);
     entries.push(trackerFields.caseNumber + "=" + caseNotes.caseNumber);
+    entries.push(tierTwoNameFormatted);
     
     //Split the call wrap summary into inquiry and actions taken
-    var templateRegex = /(?:IB:)([a-zA-Z0-9,.!? ]*)(?:OB:)([[a-zA-Z0-9,.!? ]*)/g;
+    var templateRegex = /(?:IB:)([\s\S]*)(?:OB:)([\s\S]*)/g;
     var summarySplit = templateRegex.exec(caseNotes.callWrapNotes);
-    var agentInquiry = summarySplit[1];
-    var tierTwoActionsTaken = summarySplit[2];
-    var agentInquiryFormatted = agentInquiry.split(' ').join('+');
-    var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
+    if(summarySplit !== null)
+    {
+        var agentInquiry = summarySplit[1];
+        var tierTwoActionsTaken = summarySplit[2];
+        var agentInquiryFormatted = agentInquiry.split(' ').join('+');
+        var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
     
-    entries.push(trackerFields.agentInquiry + "=" + agentInquiryFormatted);
-    entries.push(trackerFields.tierTwoActionsTaken + "=" + tierTwoActionsTakenFormatted);
+        entries.push(trackerFields.agentInquiry + "=" + agentInquiryFormatted);
+        entries.push(trackerFields.tierTwoActionsTaken + "=" + tierTwoActionsTakenFormatted);
+    }
+    else
+    {
+        var parseErrorMessage = "Unable to parse call notes";
+        entries.push(parseErrorMessage.split(' ').join('+'));
+    }
+    var commentText = trackerFields.resourceProvided + "=" + caseNotes.commentText;
+    var commentTextFormatted = commentText.split(' ').join('+');
+    entries.push(commentTextFormatted);
     
     for(var i = 0; i < entries.length; i++)
     {
