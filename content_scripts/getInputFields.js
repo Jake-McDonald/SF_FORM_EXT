@@ -60,7 +60,6 @@ function getCaseNotes(formFields) {
                 commentText: document.getElementById(formFields.commentText).value,
                 tierOneAgentName: document.getElementsByName(formFields.agentName)[0].value
             }
-
         console.log(document.getElementById(formFields.callWrapSummary).value);
         return caseNotes;
     }

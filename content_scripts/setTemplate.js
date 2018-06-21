@@ -28,7 +28,6 @@ function setTemplates(formElements)
             formElements.commentText.value = "NA";
             console.log("Set call template");
         }
-        
     }
 
     //Sets email task summary

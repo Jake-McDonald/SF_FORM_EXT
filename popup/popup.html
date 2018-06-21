@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      button {
-        height: 30px;
-        width: 30px;
-        outline: none;
-      }
-
-      body {
-        width: 300px;
-        height: 500px;
-      }
-      #testButton {
-        align:
-      }
-    </style>
+    <link rel="stylesheet" href="css\material.min.css">
+    <script src="material.min.js"></script>
+    <script src="jquery.min.js"></script>
     <script src="popup.js"></script>
+
+    <style>
+        .mdl-grid.center-items {
+            justify-content: center;
+        }
+    </style>
+
   </head>
-  <body>
-    <button id="testButton">Test</button>
+  <body style="width:200px;">
+  <div class="center-items mdl-grid mdl-layout__header-row">
+    <span class="mdl-layout-title">Tier 2 Helper</span>
+  </div>
+  <div class="center-items mdl-grid">
+        <button id="testButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Call Form</button>
+  </div>
+  </div>
   </body>
 </html>
