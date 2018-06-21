@@ -1,15 +1,14 @@
-console.log("getInputFields script started!")
+console.log("getInputFields script started!");
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if(message.command == "sendCallInfoToBackground")
     {
-        console.log("Received message from popup!")
+        console.log("Received message from popup!");
         sendResponse({message: "Message received by getInputFields"});
         chrome.runtime.sendMessage({command: "getSalesforceFields"},
-            function (response) {
+            function (response){
                 var notes = getCaseNotes(response);
-                if (notes !== undefined) {
-                    
+                if (notes !== undefined){ 
                     sendCaseNotesToBackground(notes);
                 }
                 else
@@ -25,7 +24,6 @@ chrome.runtime.sendMessage({command: "getSalesforceFields"},
     function (response) {
         var notes = getCaseNotes(response);
         if (notes !== undefined) {
-            
             setSaveButtonListener(response);
         }
         else
@@ -33,7 +31,7 @@ chrome.runtime.sendMessage({command: "getSalesforceFields"},
             console.log("Not a call wrap frame");
         }
     }
-)
+);
 
 function setSaveButtonListener(formIDs) {
    var saveButton = document.getElementsByName(formIDs.callWrapSaveButton)[0];
@@ -51,7 +49,6 @@ function getCaseNotes(formFields) {
     var commentField = document.getElementById(formFields.commentText);
     var tierOneAgentName = document.getElementsByName(formFields.agentName)[0];
     var saveButton = document.getElementsByName(formFields.callWrapSaveButton)[0];
-    
     if(caseNumberField && callWrapField && commentField && tierOneAgentName
         && saveButton)
     {
@@ -77,6 +74,3 @@ function sendCaseNotesToBackground(notes) {
         }
     )
 };
-
-    
-    
