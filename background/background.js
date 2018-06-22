@@ -21,14 +21,21 @@ chrome.runtime.onMessage.addListener(
         }
         else if(request.command === "openTrackerForm")
         {
-            var prefilledURL = createFormURL(request);
-            launchForm(prefilledURL);
-            console.log("Tracker form opened");
-            console.log("URL created: " + prefilledURL);
+            if(request.type === "call")
+            {
+                var prefilledURL = createFormURLForCall(request);
+                launchForm(prefilledURL);
+                console.log("Tracker form opened");
+                console.log("URL created: " + prefilledURL);
+            }
+            else if(request.type === "email")
+            {
+                
+            }
         }
         else {console.log("No matching command found!")}
     });
-function createFormURL(caseNotes)
+function createFormURLForCall(caseNotes)
 {
     var prefilledURL = formURL;
     var entries = [];

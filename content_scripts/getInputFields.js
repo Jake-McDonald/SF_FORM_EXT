@@ -18,6 +18,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             }
         )
     }
+    else if(message.command == "sendEmailInfoToBackground")
+    {
+        alert("Email button clicked!");
+    }
 });
 
 chrome.runtime.sendMessage({command: "getSalesforceFields"},
@@ -53,17 +57,35 @@ function getCaseNotes(formFields) {
         && saveButton)
     {
         var caseNotes =
-            {
+        {
                 command: "openTrackerForm",
+                type: "call",
                 caseNumber: document.getElementById(formFields.caseNumber).value,
                 callWrapNotes: document.getElementById(formFields.callWrapSummary).value,
                 commentText: document.getElementById(formFields.commentText).value,
                 tierOneAgentName: document.getElementsByName(formFields.agentName)[0].value
-            }
-        console.log(document.getElementById(formFields.callWrapSummary).value);
+        };
         return caseNotes;
     }
 };
+
+function getEmailCaseNotes(formFields)
+{
+    var caseNumberField = document.getElementById(formFields.emailCaseNumber);
+    var emailNotes = document.getElementById(formFields.taskSummary);
+    if(caseNumberField && emailNotes)
+    {
+        var emailCaseNotes =
+        {
+            command: "openTrackerForm",
+            type: "email",
+            emailCaseNumber: document.getElementById(formFields.emailCaseNumber).value,
+            emailNotes: document.getElementById(formFields.taskSummary).value
+        };
+        return emailCaseNotes;
+    }
+};
+    
 
 function sendCaseNotesToBackground(notes) {
     console.log("Sending case notes to background");

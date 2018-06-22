@@ -1,7 +1,7 @@
 {
-  "name": "SF_FORM_EXT",
+  "name": "Tier 2 Helper",
   "version": "0.1",
-  "description": "Build an Extension!",
+  "description": "An extension to auto-fill Google Docs form from Salesforce",
   "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "http://*/*", "https://*/*"],
   "background": {
     "scripts": ["/Form_Field_Config/salesforceFormFields.js", "/Form_Field_Config/trackerFields.js", "/Background/background.js"],
