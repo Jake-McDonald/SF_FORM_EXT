@@ -20,7 +20,20 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     }
     else if(message.command == "sendEmailInfoToBackground")
     {
-        alert("Email button clicked!");
+        console.log("Received message from popup!");
+        sendResponse({message: "Message received by getInputFields"});
+        chrome.runtime.sendMessage({command: "getSalesforceFields"},
+            function (response){
+                var notes = getEmailCaseNotes(response);
+                if (notes !== undefined){ 
+                    alert("Email button was clicked");
+                }
+                else
+                {
+                    console.log("Not a call wrap frame");
+                }
+            }
+        )
     }
 });
 

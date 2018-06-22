@@ -74,6 +74,39 @@ function createFormURLForCall(caseNotes)
     return prefilledURL;
 }
 
+function parseCaseNotes(notes)
+{
+    var templateRegex = /(?:IB:)([\s\S]*)(?:OB:)([\s\S]*)/g;
+    var summarySplit = templateRegex.exec(caseNotes.callWrapNotes);
+    if(summarySplit !== null)
+    {
+        var agentInquiry = summarySplit[1];
+        var tierTwoActionsTaken = summarySplit[2];
+        var agentInquiryFormatted = agentInquiry.split(' ').join('+');
+        var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
+        
+        var summary =
+        {
+            unparsedSummary: notes,
+            agentInquiry: agentInquiryFormatted,
+            tierTwoActionsTaken: tierTwoActionsTakenFormatted
+        }
+        return summary;
+    }
+    else
+    {
+         var parseErrorMessage = "Unable to parse call notes";
+         var parseErrorMessageFormatted = parseErrorMessage.split(' ').join('+');
+         var summary =
+         {
+             unparsedSummary: notes,
+             agentInquiry: parseErrorMessageFormatted,
+             tierTwoActionsTaken: parseErrorMessageFormatted
+         }
+         return summary;
+    }
+}
+
 let launchForm = function(formUrl) {
     chrome.tabs.create({ url: formUrl });
 }
