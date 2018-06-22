@@ -7,18 +7,54 @@
     <script src="popup.js"></script>
 
     <style>
+        body {
+            width:200px;
+            height:300px;
+            background-color: #F5F5F5;
+        }
+        .wrap {
+            display: inline-block;
+        }
+        .mdl-button{
+            width: 70%;
+        }
         .mdl-grid.center-items {
             justify-content: center;
+        }
+        .mdl-switch{
+            width: 70%;
+        }
+        .mdl-switch {
+            height: auto
         }
     </style>
 
   </head>
-  <body style="width:200px;">
-  <div class="center-items mdl-grid mdl-layout__header-row">
+  <body>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+  <div class="mdl-grid center-items mdl-layout__header-row">
     <span class="mdl-layout-title">Tier 2 Helper</span>
   </div>
+  </header>
+  <div class = "wrap">
   <div class="center-items mdl-grid">
-        <button id="testButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Call Form</button>
+        <button id="callButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Call Form</button>
+  </div>
+  <div class="center-items mdl-grid">
+        <button id="emailButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Email Form</button>
+  </div>
+  <div id ="wrap" class="center-items mdl-grid">
+      <label for="switch1" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+        <input type="checkbox" id="switch1" class="mdl-switch__input">
+        <span class="mdl-switch__label">Template Auto-Fill</span>
+    </label>
+        <label for="switch2" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+        <input type="checkbox" id="switch2" class="mdl-switch__input">
+        <span class="mdl-switch__label">Form Auto-Submit</span>
+    </label>
+  </div>
+  </div>
   </div>
   </div>
   </body>

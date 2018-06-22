@@ -1,9 +1,9 @@
-document.addEventListener("DOMContentLoaded", function() {initTestButton()});
+document.addEventListener("DOMContentLoaded", function() {initButtons()});
 
 
-function initTestButton()
+function initButtons()
 {
-    var button1 = document.getElementById("testButton");
+    var button1 = document.getElementById("callButton");
     button1.addEventListener("click", sendCallInfoToBackground);
 }
 
