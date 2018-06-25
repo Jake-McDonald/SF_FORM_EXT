@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         chrome.runtime.sendMessage({command: "getSalesforceFields"},
             function (response){
                 var notes = getCaseNotes(response);
-                if (notes !== undefined){ 
+                if (notes !== undefined){
                     sendCaseNotesToBackground(notes);
                 }
                 else
@@ -26,7 +26,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             function (response){
                 var notes = getEmailCaseNotes(response);
                 if (notes !== undefined){ 
-                    alert("Email button was clicked");
+                    sendCaseNotesToBackground(notes);
                 }
                 else
                 {
@@ -80,7 +80,7 @@ function getCaseNotes(formFields) {
         };
         return caseNotes;
     }
-};
+}
 
 function getEmailCaseNotes(formFields)
 {
@@ -92,12 +92,12 @@ function getEmailCaseNotes(formFields)
         {
             command: "openTrackerForm",
             type: "email",
-            emailCaseNumber: document.getElementById(formFields.emailCaseNumber).value,
-            emailNotes: document.getElementById(formFields.taskSummary).value
+            caseNumber: document.getElementById(formFields.emailCaseNumber).value,
+            callWrapNotes: document.getElementById(formFields.taskSummary).value
         };
         return emailCaseNotes;
     }
-};
+}
     
 
 function sendCaseNotesToBackground(notes) {

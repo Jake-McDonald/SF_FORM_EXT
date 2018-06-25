@@ -21,52 +21,53 @@ chrome.runtime.onMessage.addListener(
         }
         else if(request.command === "openTrackerForm")
         {
-            if(request.type === "call")
-            {
-                var prefilledURL = createFormURLForCall(request);
-                launchForm(prefilledURL);
-                console.log("Tracker form opened");
-                console.log("URL created: " + prefilledURL);
-            }
-            else if(request.type === "email")
-            {
-                
-            }
+            var prefilledURL = createFormURL(request);
+            launchForm(prefilledURL);
+            console.log("Tracker form opened");
+            console.log("URL created: " + prefilledURL);
         }
         else {console.log("No matching command found!")}
     });
-function createFormURLForCall(caseNotes)
+function createFormURL(caseNotes)
 {
     var prefilledURL = formURL;
     var entries = [];
-    var agentName = trackerFields.tierOneName + "=" + caseNotes.tierOneAgentName;
-    var agentNameFormatted = agentName.split(' ').join('+');
     var tierTwoName = trackerFields.tierTwoName + "=" + "Jacob";
     var tierTwoNameFormatted = tierTwoName.split(' ').join('+');
-    var commentText = trackerFields.resourceProvided + "=" + caseNotes.commentText;
-    var commentTextFormatted = commentText.split(' ').join('+');
-
-    //Split the call wrap summary into inquiry and actions taken
-    var templateRegex = /(?:IB:)([\s\S]*)(?:OB:)([\s\S]*)/g;
-    var summarySplit = templateRegex.exec(caseNotes.callWrapNotes);
-    if(summarySplit !== null)
-    {
-        var agentInquiry = summarySplit[1];
-        var tierTwoActionsTaken = summarySplit[2];
-        var agentInquiryFormatted = agentInquiry.split(' ').join('+');
-        var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
-        entries.push(trackerFields.agentInquiry + "=" + agentInquiryFormatted);
-        entries.push(trackerFields.tierTwoActionsTaken + "=" + tierTwoActionsTakenFormatted);
-    }
-    else
-    {
-        var parseErrorMessage = "Unable to parse call notes";
-        entries.push(trackerFields.agentInquiry + "=" + parseErrorMessage.split(' ').join('+'));
-    }
-    entries.push(commentTextFormatted);
-    entries.push(agentNameFormatted);
-    entries.push(trackerFields.caseNumber + "=" + caseNotes.caseNumber);
     entries.push(tierTwoNameFormatted);
+    entries.push(trackerFields.caseNumber + "=" + caseNotes.caseNumber); //doesn't require formatting
+    if(caseNotes.type === "call")
+    {
+        //Add the agent name to the URL
+        var agentName = trackerFields.tierOneName + "=" + caseNotes.tierOneAgentName;
+        var agentNameFormatted = agentName.split(' ').join('+');
+        //Add comment field (currently used for resource links) to the URL
+        var commentText = trackerFields.resourceProvided + "=" + caseNotes.commentText;
+        var commentTextFormatted = commentText.split(' ').join('+');
+        //Add default outcome for consultations
+        var outcome = trackerFields.outcome + "=" + "T1 continued call/email with support from T2";
+        var outcomeFormmated = outcome.split(' ').join('+');
+        //Set interaction type to Phone
+        var contactMethod = trackerFields.contactMethod + "=" + "Agent - Phone";
+        var contactMethodFormatted = contactMethod.split(' ').join('+');
+        //Push the entries to an array
+        entries.push(commentTextFormatted);
+        entries.push(agentNameFormatted);
+        entries.push(outcomeFormmated);
+        entries.push(contactMethodFormatted);
+    }
+    else if(caseNotes.type === "email")
+    {
+        var outcome = trackerFields.outcome + "=" + "T2 handled elevation received by email";
+        var outcomeFormatted = outcome.split(' ').join('+');
+        var contactMethod = trackerFields.contactMethod + "=" + "Agent - Email";
+        var contactMethodFormatted = contactMethod.split(' ').join('+');
+        entries.push(outcomeFormatted);
+        entries.push(contactMethodFormatted);
+    }
+    var notesSummary = parseCaseNotes(caseNotes);
+    entries.push(trackerFields.agentInquiry + "=" + notesSummary.agentInquiry);
+    entries.push(trackerFields.tierTwoActionsTaken + "=" + notesSummary.tierTwoActionsTaken);
     for(var i = 0; i < entries.length; i++)
     {
         prefilledURL += "&" + entries[i];
@@ -76,15 +77,14 @@ function createFormURLForCall(caseNotes)
 
 function parseCaseNotes(notes)
 {
-    var templateRegex = /(?:IB:)([\s\S]*)(?:OB:)([\s\S]*)/g;
-    var summarySplit = templateRegex.exec(caseNotes.callWrapNotes);
+    var templateRegex = /(?:IB: )([\s\S]*)(?:OB: )([\s\S]*)/g;
+    var summarySplit = templateRegex.exec(notes.callWrapNotes);
     if(summarySplit !== null)
     {
         var agentInquiry = summarySplit[1];
         var tierTwoActionsTaken = summarySplit[2];
         var agentInquiryFormatted = agentInquiry.split(' ').join('+');
         var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
-        
         var summary =
         {
             unparsedSummary: notes,
@@ -95,7 +95,7 @@ function parseCaseNotes(notes)
     }
     else
     {
-         var parseErrorMessage = "Unable to parse call notes";
+         var parseErrorMessage = "Unable to parse task summary.";
          var parseErrorMessageFormatted = parseErrorMessage.split(' ').join('+');
          var summary =
          {

@@ -7,5 +7,6 @@ trackerFields = {
     "agentInquiry": "entry.1125842625",
     "tierTwoActionsTaken": "entry.1555734172",
     "resourceProvided": "entry.689876397",
-    "consultationResult": "entry.1065249769"
+    "outcome": "entry.1065249769",
+    "contactMethod":"entry.837488045"
 };
