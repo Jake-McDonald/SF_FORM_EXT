@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="..\global\css\material.min.css">
+    <link rel="stylesheet" href="css\login.css">
+    <script src="..\global\libs\material.min.js"></script>
+    <script src="..\global\libs\jquery.min.js"></script>
+    <script src="login.js"></script>
+  </head>
+  <body>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+  <div class="mdl-grid center-items mdl-layout__header-row">
+    <span class="mdl-layout-title">Tier 2 Helper</span>
+  </div>
+  </header>
+  <div class = "wrap">
+  <div class="center-items mdl-grid">
+        <form action="#">
+            <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--stretch">
+                <input id="username" class="mdl-textfield__input" type="text" id="sample1">
+                <span class="mdl-tooltip" for="username">Enter your name is it appears on the Tier 2 tracker</span>
+                <label class="mdl-textfield__label" for="sample1">Enter your name</label>
+            </div>
+        </form>
+    </div>
+    <div class="center-items mdl-grid">
+        <div>
+            <button id="loginbutton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">login</button>
+        </div>
+  </div>
+  <div class="center-items mdl-grid">
+    <p id=loginerror></p>
+  </div>
+  </div>
+  </div>
+  </body>
+</html>

@@ -4,14 +4,24 @@
 var salesforceFields = salesforceFormFields;
 var trackerFieldsIDs = trackerFields;
 var formURL = trackerFieldsIDs.trackerURL;
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    chrome.declarativeContent.onPageChanged.addRules([{
-      conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: {hostEquals: 'smarttechnologies.my.salesforce.com'},
-      })],
-      actions: [new chrome.declarativeContent.ShowPageAction()]
-    }]);
-  });
+var username;
+
+chrome.tabs.onCreated.addListener(function(){
+    console.log("Startup listener fired");
+    chrome.storage.sync.get("user", function(result){
+        if(typeof result.user === 'undefined')
+        {
+            console.log("Didn't find user");
+            popupHandler({popup: "login"});
+        }    
+        else
+        {           
+            console.log("Found user: " + result.user);
+            username = result.user;
+            popupHandler({popup: "main"});
+        }
+    })
+})
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -26,13 +36,21 @@ chrome.runtime.onMessage.addListener(
             console.log("Tracker form opened");
             console.log("URL created: " + prefilledURL);
         }
-        else {console.log("No matching command found!")}
+        else if(request.command === "setPopup")
+        {
+            popupHandler(request);
+            console.log("Popup change request recieved");
+        }
+        else if(request.command === "setUserName")
+        {
+            username = request.userName;
+        }
     });
 function createFormURL(caseNotes)
 {
     var prefilledURL = formURL;
     var entries = [];
-    var tierTwoName = trackerFields.tierTwoName + "=" + "Jacob";
+    var tierTwoName = trackerFields.tierTwoName + "=" + username;
     var tierTwoNameFormatted = tierTwoName.split(' ').join('+');
     entries.push(tierTwoNameFormatted);
     entries.push(trackerFields.caseNumber + "=" + caseNotes.caseNumber); //doesn't require formatting
@@ -109,4 +127,21 @@ function parseCaseNotes(notes)
 
 let launchForm = function(formUrl) {
     chrome.tabs.create({ url: formUrl });
+}
+
+function popupHandler(request)
+{
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        var tab = tabs[0];
+        if(request.popup === "main")
+        {
+            chrome.browserAction.setPopup({popup: "/popup/popup.html"});
+            console.log("Setting popup to main");
+        }
+        else if(request.popup === "login")
+        {
+            console.log("Set popup to login");
+            chrome.browserAction.setPopup({popup: "/popup/login.html"});
+        }
+    })
 }

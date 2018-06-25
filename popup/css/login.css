@@ -1,0 +1,25 @@
+body {
+        width:200px;
+        height:285px;
+        background-color: #F5F5F5; /*White Smoke*/
+}
+
+.wrap {
+    display: inline-block;
+}
+.mdl-grid.center-items {
+    justify-content: center;
+}
+.mdl-switch{
+    width: 70%;
+}
+.mdl-switch {
+    height: auto
+}
+.mdl-switch__label {
+    font-size: 95%;
+}
+
+#username {
+    text-align: center;
+}
