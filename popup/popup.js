@@ -66,7 +66,7 @@ function setToggleStates()
         }
         else
         {
-            switchOff(switchOn(document.querySelector('.mdl-js-switch')));
+            switchOff(document.querySelector('.mdl-js-switch'));
         }
     }
     )
