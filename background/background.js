@@ -6,6 +6,15 @@ var trackerFieldsIDs = trackerFields;
 var formURL = trackerFieldsIDs.trackerURL;
 var username;
 
+chrome.runtime.onInstalled.addListener(function() {
+    chrome.storage.local.set({"templateAutofill": true}, function(){
+            console.log("Default value of templateAutofill was set to true");
+        })
+    chrome.storage.local.set({"autoCallFormSubmit": true}, function(){
+            console.log("Default value of autoCallFormSubmit was set to true");
+        })
+})
+
 chrome.tabs.onCreated.addListener(function(){
     console.log("Startup listener fired");
     chrome.storage.sync.get("user", function(result){
@@ -43,7 +52,7 @@ chrome.runtime.onMessage.addListener(
         }
         else if(request.command === "setUserName")
         {
-            username = request.userName;
+            setUserName(request.userName);
         }
     });
 function createFormURL(caseNotes)
@@ -144,4 +153,9 @@ function popupHandler(request)
             chrome.browserAction.setPopup({popup: "/popup/login.html"});
         }
     })
+}
+
+function setUserName(name)
+{
+    username = name;
 }
