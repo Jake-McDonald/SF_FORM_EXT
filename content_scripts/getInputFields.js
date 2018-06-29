@@ -51,10 +51,18 @@ chrome.runtime.sendMessage({command: "getSalesforceFields"},
 );
 
 function setSaveButtonListener(formIDs) {
+    
+    
    var saveButton = document.getElementsByName(formIDs.callWrapSaveButton)[0];
    saveButton.addEventListener('click', function () {
        var caseNotes = getCaseNotes(formIDs);
-       sendCaseNotesToBackground(caseNotes);
+        chrome.storage.local.get("autoCallFormSubmit", function(currentState) {
+                if(currentState.autoCallFormSubmit === true)
+                {
+                    sendCaseNotesToBackground(caseNotes);
+                }
+            }
+            )
        console.log("Save button in call wrap was clicked");
    })
     console.log("Call wrap saver button listener set!");

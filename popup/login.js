@@ -26,6 +26,7 @@ function loginHandler()
             console.log(userName + " successfully signed in.");
         })
         chrome.runtime.sendMessage({command: "setPopup", popup: "main"});
+        //Make sure username is set immediately. Username is otherwise only updated on Chrome tab creation.
         chrome.runtime.sendMessage({"command": "setUserName", "userName": userName});
         location.href = "popup.html";
     }

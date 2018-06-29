@@ -12,7 +12,13 @@ chrome.runtime.sendMessage({command: "getSalesforceFields"},
                 emailTaskSummary: document.getElementById(response.taskSummary)
             };
             console.log("Received Salesforce field IDs");
-            setTemplates(formElements);
+            chrome.storage.local.get("templateAutofill", function(currentState) {
+                if(currentState.templateAutofill === true)
+                {
+                    setTemplates(formElements);
+                }
+            }
+            )
         }
     }
 )

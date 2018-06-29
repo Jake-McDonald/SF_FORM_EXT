@@ -6,14 +6,15 @@ var trackerFieldsIDs = trackerFields;
 var formURL = trackerFieldsIDs.trackerURL;
 var username;
 
+
 chrome.runtime.onInstalled.addListener(function() {
     chrome.storage.local.set({"templateAutofill": true}, function(){
             console.log("Default value of templateAutofill was set to true");
-        })
+        });
     chrome.storage.local.set({"autoCallFormSubmit": true}, function(){
             console.log("Default value of autoCallFormSubmit was set to true");
-        })
-})
+        });
+});
 
 chrome.tabs.onCreated.addListener(function(){
     console.log("Startup listener fired");
@@ -22,15 +23,14 @@ chrome.tabs.onCreated.addListener(function(){
         {
             console.log("Didn't find user");
             popupHandler({popup: "login"});
-        }    
+        }
         else
-        {           
+        {
             console.log("Found user: " + result.user);
-            username = result.user;
             popupHandler({popup: "main"});
         }
-    })
-})
+    });
+});
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -40,10 +40,9 @@ chrome.runtime.onMessage.addListener(
         }
         else if(request.command === "openTrackerForm")
         {
-            var prefilledURL = createFormURL(request);
-            launchForm(prefilledURL);
+            createFormURL(request, launchForm);
             console.log("Tracker form opened");
-            console.log("URL created: " + prefilledURL);
+            console.log("URL created");
         }
         else if(request.command === "setPopup")
         {
@@ -55,51 +54,54 @@ chrome.runtime.onMessage.addListener(
             setUserName(request.userName);
         }
     });
-function createFormURL(caseNotes)
+function createFormURL(caseNotes, callback)
 {
-    var prefilledURL = formURL;
-    var entries = [];
-    var tierTwoName = trackerFields.tierTwoName + "=" + username;
-    var tierTwoNameFormatted = tierTwoName.split(' ').join('+');
-    entries.push(tierTwoNameFormatted);
-    entries.push(trackerFields.caseNumber + "=" + caseNotes.caseNumber); //doesn't require formatting
-    if(caseNotes.type === "call")
-    {
-        //Add the agent name to the URL
-        var agentName = trackerFields.tierOneName + "=" + caseNotes.tierOneAgentName;
-        var agentNameFormatted = agentName.split(' ').join('+');
-        //Add comment field (currently used for resource links) to the URL
-        var commentText = trackerFields.resourceProvided + "=" + caseNotes.commentText;
-        var commentTextFormatted = commentText.split(' ').join('+');
-        //Add default outcome for consultations
-        var outcome = trackerFields.outcome + "=" + "T1 continued call/email with support from T2";
-        var outcomeFormmated = outcome.split(' ').join('+');
-        //Set interaction type to Phone
-        var contactMethod = trackerFields.contactMethod + "=" + "Agent - Phone";
-        var contactMethodFormatted = contactMethod.split(' ').join('+');
-        //Push the entries to an array
-        entries.push(commentTextFormatted);
-        entries.push(agentNameFormatted);
-        entries.push(outcomeFormmated);
-        entries.push(contactMethodFormatted);
+    chrome.storage.sync.get("user", function(result){
+        var prefilledURL = formURL;
+        var entries = [];
+        var tierTwoName = trackerFields.tierTwoName + "=" + result.user;
+        var tierTwoNameFormatted = tierTwoName.split(' ').join('+');
+        entries.push(tierTwoNameFormatted);
+        entries.push(trackerFields.caseNumber + "=" + caseNotes.caseNumber); //doesn't require formatting
+        if(caseNotes.type === "call")
+        {
+            //Add the agent name to the URL
+            var agentName = trackerFields.tierOneName + "=" + caseNotes.tierOneAgentName;
+            var agentNameFormatted = agentName.split(' ').join('+');
+            //Add comment field (currently used for resource links) to the URL
+            var commentText = trackerFields.resourceProvided + "=" + caseNotes.commentText;
+            var commentTextFormatted = commentText.split(' ').join('+');
+            //Add default outcome for consultations
+            var outcome = trackerFields.outcome + "=" + "T1 continued call/email with support from T2";
+            var outcomeFormmated = outcome.split(' ').join('+');
+            //Set interaction type to Phone
+            var contactMethod = trackerFields.contactMethod + "=" + "Agent - Phone";
+            var contactMethodFormatted = contactMethod.split(' ').join('+');
+            //Push the entries to an array
+            entries.push(commentTextFormatted);
+            entries.push(agentNameFormatted);
+            entries.push(outcomeFormmated);
+            entries.push(contactMethodFormatted);
+        }
+        else if(caseNotes.type === "email")
+        {
+            var outcome = trackerFields.outcome + "=" + "T2 handled elevation received by email";
+            var outcomeFormatted = outcome.split(' ').join('+');
+            var contactMethod = trackerFields.contactMethod + "=" + "Agent - Email";
+            var contactMethodFormatted = contactMethod.split(' ').join('+');
+            entries.push(outcomeFormatted);
+            entries.push(contactMethodFormatted);
+        }
+        var notesSummary = parseCaseNotes(caseNotes);
+        entries.push(trackerFields.agentInquiry + "=" + notesSummary.agentInquiry);
+        entries.push(trackerFields.tierTwoActionsTaken + "=" + notesSummary.tierTwoActionsTaken);
+        for(var i = 0; i < entries.length; i++)
+        {
+            prefilledURL += "&" + entries[i];
+        }
+        callback(prefilledURL);
     }
-    else if(caseNotes.type === "email")
-    {
-        var outcome = trackerFields.outcome + "=" + "T2 handled elevation received by email";
-        var outcomeFormatted = outcome.split(' ').join('+');
-        var contactMethod = trackerFields.contactMethod + "=" + "Agent - Email";
-        var contactMethodFormatted = contactMethod.split(' ').join('+');
-        entries.push(outcomeFormatted);
-        entries.push(contactMethodFormatted);
-    }
-    var notesSummary = parseCaseNotes(caseNotes);
-    entries.push(trackerFields.agentInquiry + "=" + notesSummary.agentInquiry);
-    entries.push(trackerFields.tierTwoActionsTaken + "=" + notesSummary.tierTwoActionsTaken);
-    for(var i = 0; i < entries.length; i++)
-    {
-        prefilledURL += "&" + entries[i];
-    }
-    return prefilledURL;
+    )
 }
 
 function parseCaseNotes(notes)
@@ -134,7 +136,7 @@ function parseCaseNotes(notes)
     }
 }
 
-let launchForm = function(formUrl) {
+var launchForm = function(formUrl) {
     chrome.tabs.create({ url: formUrl });
 }
 

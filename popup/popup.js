@@ -2,29 +2,28 @@ document.addEventListener("DOMContentLoaded", function() {
     setToggleStates();
     initButtons()
     });
-
 function initButtons()
 {
     var button1 = document.getElementById("callButton");
     button1.addEventListener("click", sendCallInfoToBackground);
     var button2 = document.getElementById("emailButton");
     button2.addEventListener("click", sendEmailInfoToBackground);
-    var switch1 = document.getElementById("templateAutofill");
-    switch1.addEventListener("change", toggleTemplateAutofill);
-    var switch2 = document.getElementById("autoCallFormSubmit");
-    switch2.addEventListener("change", toggleAutoCallFormSubmit);
+    var switch1 = document.querySelector("#template");
+    switch1.addEventListener("change", function(){
+        toggleSwitchState(this)}
+    );
+    var switch2 = document.querySelector("#callForm");
+    switch2.addEventListener("change", function(){
+        toggleSwitchState(this)}
+    );
 }
-
 function sendCallInfoToBackground()
 {
-    console.log("Test button was clicked!");
-
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var tab = tabs[0];
         chrome.tabs.sendMessage(tab.id, {"command": "sendCallInfoToBackground"}, function (response) {
         })})
 }
-
 function sendEmailInfoToBackground()
 {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -32,73 +31,68 @@ function sendEmailInfoToBackground()
         chrome.tabs.sendMessage(tab.id, {"command": "sendEmailInfoToBackground"}, function (response) {
         })})
 }
-
-function toggleTemplateAutofill()
+function toggleSwitchState(switchElement)
 {
-    /*
-    var switch = document.getElementById("templateAutofill");
-    if(switch.checked === true)
+    if(switchElement.MaterialSwitch.inputElement_.checked)
     {
-        switchOff(switch);
+        saveSwitchState(switchElement, true);
     }
     else
     {
-        switchOn(switch);
+        saveSwitchState(switchElement, false);
     }
-    */
 }
-
-function toggleAutoCallFormSubmit()
-{
-    /*
-    toggleCheckbox(document.getElementById("autoCallFormSubmit"));
-    */
-}
-
 function setToggleStates()
 {
     chrome.storage.local.get("templateAutofill", function(result) {
         console.log(result.templateAutofill);
         if(result.templateAutofill === true)
         {
-            console.log("True!!!");
-            switchOn(document.querySelector('.mdl-js-switch'));
+            switchOn(document.querySelector("#template"));
         }
         else
         {
-            switchOff(document.querySelector('.mdl-js-switch'));
+            switchOff(document.querySelector("#template"));
         }
     }
     )
-    
-    /*
     chrome.storage.local.get("autoCallFormSubmit", function(result) {
         if(result.autoCallFormSubmit === true)
         {
-            switchOn(document.getElementById("autoCallFormSubmitLabel"));
+            switchOn(document.querySelector("#callForm"));
         }
         else
         {
-            switchOff(document.getElementById("autoCallFormSubmitLabel"));
+            switchOff(document.querySelector("#callForm"));
         }
     }
     )
-    */
 }
-
-function toggleCheckbox(element)
-{
-    element.checked = !element.checked;
-}
-
 function switchOn(element)
 {
     element.MaterialSwitch.on();
     console.log("Switched on!");
 }
-
 function switchOff(element)
 {
     element.MaterialSwitch.off();
     console.log("Switched off!");
+}
+function saveSwitchState(switchElement, state)
+{
+    var switchName = switchElement.getAttribute("name");
+    var switchState = {};
+    switchState[switchName] = state;
+    chrome.storage.local.set(switchState, function() {
+        console.log(switchName + " set to " + state + ".")
+        }
+    )
+}
+
+function updateContentScripts()
+{
+     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        var tab = tabs[0];
+        chrome.tabs.sendMessage(tab.id, {"command": "switchStatesUpdated"}, function (response) {
+        })})
 }
