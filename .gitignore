@@ -69,5 +69,7 @@ modules.xml
 # Sonarlint plugin
 .idea/sonarlint
 
+# Ignore zip files
+.zip
 
 # End of https://www.gitignore.io/api/webstorm
