@@ -1,6 +1,6 @@
 {
   "name": "Tier 2 Helper",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "An extension to auto-fill Google Docs form from Salesforce",
   "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "http://*/*", "https://*/*"],
   "background": {
