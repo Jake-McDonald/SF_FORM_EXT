@@ -106,12 +106,12 @@ function createFormURL(caseNotes, callback)
 
 function parseCaseNotes(notes)
 {
-    var templateRegex = /(?:IB: )([\s\S]*)(?:OB: )([\s\S]*)/g;
+    var templateRegex = /(?:IB:)([\s\S]*)(?:OB:)([\s\S]*)/g;
     var summarySplit = templateRegex.exec(notes.callWrapNotes);
     if(summarySplit !== null)
     {
-        var agentInquiry = summarySplit[1];
-        var tierTwoActionsTaken = summarySplit[2];
+        var agentInquiry = summarySplit[1].trim();
+        var tierTwoActionsTaken = summarySplit[2].trim();
         var agentInquiryFormatted = agentInquiry.split(' ').join('+');
         var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
         var summary =
