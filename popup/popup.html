@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="..\global\css\material.min.css">
-    <link rel="stylesheet" href="css\popup.css">
-    <script src="..\global\libs\material.min.js"></script>
-    <script src="..\global\libs\jquery.min.js"></script>
-    <script src="popup.js"></script>
-  </head>
-  <body>
+
+<head>
+  <link rel="stylesheet" href="..\global\css\material.min.css">
+  <link rel="stylesheet" href="css\popup.css">
+  <script src="..\global\libs\material.min.js"></script>
+  <script src="..\global\libs\jquery.min.js"></script>
+  <script src="popup.js"></script>
+</head>
+
+<body>
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-  <header class="mdl-layout__header">
-  <div class="mdl-grid center-items mdl-layout__header-row">
-    <span class="mdl-layout-title">Tier 2 Helper</span>
-  </div>
-  </header>
-  <div class = "wrap">
-  <div class="center-items mdl-grid">
+    <header class="mdl-layout__header">
+      <div class="mdl-grid center-items mdl-layout__header-row">
+        <span class="mdl-layout-title">Tier 2 Helper</span>
+      </div>
+    </header>
+    <div class="wrap">
+      <div class="center-items mdl-grid">
         <button id="callButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Call Form</button>
-  </div>
-  <div class="center-items mdl-grid">
+      </div>
+      <div class="center-items mdl-grid">
         <button id="emailButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">Email Form</button>
-  </div>
-  <div id ="wrap" class="center-items mdl-grid">
-      <label for="templateAutofill" id="template" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" name="templateAutofill">
-        <input type="checkbox" id="templateAutofill" class="mdl-switch__input" checked=checked>
-        <span class="mdl-switch__label">Template Auto-Fill</span>
-    </label>
+      </div>
+      <div id="wrap" class="center-items mdl-grid">
+        <label for="templateAutofill" id="template" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" name="templateAutofill">
+          <input type="checkbox" id="templateAutofill" class="mdl-switch__input" checked=checked>
+          <span class="mdl-switch__label">Template Auto-Fill</span>
+        </label>
         <label for="autoCallFormSubmit" id="callForm" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" name="autoCallFormSubmit">
-        <input type="checkbox" id="autoCallFormSubmit" class="mdl-switch__input" checked=checked>
-        <span class="mdl-switch__label">Form Auto-Submit</span>
-    </label>
+          <input type="checkbox" id="autoCallFormSubmit" class="mdl-switch__input" checked=checked>
+          <span class="mdl-switch__label">Form Auto-Submit</span>
+        </label>
+      </div>
+    </div>
   </div>
   </div>
-  </div>
-  </div>
-  </body>
+</body>
+
 </html>

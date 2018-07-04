@@ -7,64 +7,57 @@ var formURL = trackerFieldsIDs.trackerURL;
 var username;
 
 
-chrome.runtime.onInstalled.addListener(function() {
-    chrome.storage.local.set({"templateAutofill": true}, function(){
-            console.log("Default value of templateAutofill was set to true");
-        });
-    chrome.storage.local.set({"autoCallFormSubmit": true}, function(){
-            console.log("Default value of autoCallFormSubmit was set to true");
-        });
+chrome.runtime.onInstalled.addListener(function () {
+    chrome.storage.local.set({ "templateAutofill": true }, function () {
+        console.log("Default value of templateAutofill was set to true");
+    });
+    chrome.storage.local.set({ "autoCallFormSubmit": true }, function () {
+        console.log("Default value of autoCallFormSubmit was set to true");
+    });
 });
 
-chrome.tabs.onCreated.addListener(function(){
+chrome.tabs.onCreated.addListener(function () {
     console.log("Startup listener fired");
-    chrome.storage.sync.get("user", function(result){
-        if(typeof result.user === 'undefined')
-        {
+    chrome.storage.sync.get("user", function (result) {
+        if (typeof result.user === 'undefined') {
             console.log("Didn't find user");
-            popupHandler({popup: "login"});
+            popupHandler({ popup: "login" });
         }
-        else
-        {
+        else {
             console.log("Found user: " + result.user);
-            popupHandler({popup: "main"});
+            popupHandler({ popup: "main" });
         }
     });
 });
 
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
+    function (request, sender, sendResponse) {
         if (request.command === "getSalesforceFields") {
             sendResponse(salesforceFields);
             console.log("Sent response!!!");
         }
-        else if(request.command === "openTrackerForm")
-        {
+        else if (request.command === "openTrackerForm") {
             createFormURL(request, launchForm);
             console.log("Tracker form opened");
             console.log("URL created");
         }
-        else if(request.command === "setPopup")
-        {
+        else if (request.command === "setPopup") {
             popupHandler(request);
             console.log("Popup change request recieved");
         }
-        else if(request.command === "setUserName")
-        {
+        else if (request.command === "setUserName") {
             setUserName(request.userName);
         }
     });
-function createFormURL(caseNotes, callback)
-{
-    chrome.storage.sync.get("user", function(result){
+function createFormURL(caseNotes, callback) {
+    chrome.storage.sync.get("user", function (result) {
         var prefilledURL = formURL;
         var entries = [];
         var tierTwoName = trackerFields.tierTwoName + "=" + result.user;
         var tierTwoNameFormatted = tierTwoName.split(' ').join('+');
         entries.push(tierTwoNameFormatted);
         entries.push(trackerFields.caseNumber + "=" + caseNotes.caseNumber); //doesn't require formatting
-        if(caseNotes.type === "call")
-        {
+        if (caseNotes.type === "call") {
             //Add the agent name to the URL
             var agentName = trackerFields.tierOneName + "=" + caseNotes.tierOneAgentName;
             var agentNameFormatted = agentName.split(' ').join('+');
@@ -83,8 +76,7 @@ function createFormURL(caseNotes, callback)
             entries.push(outcomeFormmated);
             entries.push(contactMethodFormatted);
         }
-        else if(caseNotes.type === "email")
-        {
+        else if (caseNotes.type === "email") {
             var outcome = trackerFields.outcome + "=" + "T2 handled elevation received by email";
             var outcomeFormatted = outcome.split(' ').join('+');
             var contactMethod = trackerFields.contactMethod + "=" + "Agent - Email";
@@ -95,8 +87,7 @@ function createFormURL(caseNotes, callback)
         var notesSummary = parseCaseNotes(caseNotes);
         entries.push(trackerFields.agentInquiry + "=" + notesSummary.agentInquiry);
         entries.push(trackerFields.tierTwoActionsTaken + "=" + notesSummary.tierTwoActionsTaken);
-        for(var i = 0; i < entries.length; i++)
-        {
+        for (var i = 0; i < entries.length; i++) {
             prefilledURL += "&" + entries[i];
         }
         callback(prefilledURL);
@@ -104,12 +95,10 @@ function createFormURL(caseNotes, callback)
     )
 }
 
-function parseCaseNotes(notes)
-{
+function parseCaseNotes(notes) {
     var templateRegex = /(?:IB:)([\s\S]*)(?:OB:)([\s\S]*)/g;
     var summarySplit = templateRegex.exec(notes.callWrapNotes);
-    if(summarySplit !== null)
-    {
+    if (summarySplit !== null) {
         var agentInquiry = summarySplit[1].trim();
         var tierTwoActionsTaken = summarySplit[2].trim();
         var agentInquiryFormatted = agentInquiry.split(' ').join('+');
@@ -122,42 +111,37 @@ function parseCaseNotes(notes)
         }
         return summary;
     }
-    else
-    {
-         var parseErrorMessage = "Unable to parse task summary.";
-         var parseErrorMessageFormatted = parseErrorMessage.split(' ').join('+');
-         var summary =
-         {
-             unparsedSummary: notes,
-             agentInquiry: parseErrorMessageFormatted,
-             tierTwoActionsTaken: parseErrorMessageFormatted
-         }
-         return summary;
+    else {
+        var parseErrorMessage = "Unable to parse task summary.";
+        var parseErrorMessageFormatted = parseErrorMessage.split(' ').join('+');
+        var summary =
+        {
+            unparsedSummary: notes,
+            agentInquiry: parseErrorMessageFormatted,
+            tierTwoActionsTaken: parseErrorMessageFormatted
+        }
+        return summary;
     }
 }
 
-var launchForm = function(formUrl) {
+var launchForm = function (formUrl) {
     chrome.tabs.create({ url: formUrl });
 }
 
-function popupHandler(request)
-{
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+function popupHandler(request) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         var tab = tabs[0];
-        if(request.popup === "main")
-        {
-            chrome.browserAction.setPopup({popup: "/popup/popup.html"});
+        if (request.popup === "main") {
+            chrome.browserAction.setPopup({ popup: "/popup/popup.html" });
             console.log("Setting popup to main");
         }
-        else if(request.popup === "login")
-        {
+        else if (request.popup === "login") {
             console.log("Set popup to login");
-            chrome.browserAction.setPopup({popup: "/popup/login.html"});
+            chrome.browserAction.setPopup({ popup: "/popup/login.html" });
         }
     })
 }
 
-function setUserName(name)
-{
+function setUserName(name) {
     username = name;
 }

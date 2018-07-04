@@ -2,45 +2,62 @@
   "name": "Tier 2 Helper",
   "version": "1.0.1",
   "description": "An extension to auto-fill Google Docs form from Salesforce",
-  "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "http://*/*", "https://*/*"],
+  "permissions": [
+    "activeTab",
+    "declarativeContent",
+    "storage",
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ],
   "background": {
-    "scripts": ["/Form_Field_Config/salesforceFormFields.js", "/Form_Field_Config/trackerFields.js", "/Background/background.js"],
+    "scripts": [
+      "/Form_Field_Config/salesforceFormFields.js",
+      "/Form_Field_Config/trackerFields.js",
+      "/Background/background.js"
+    ],
     "persistent": false
   },
-  
   "browser_action": {
-     "default_popup": "/Popup/login.html",
+    "default_popup": "/Popup/login.html",
     "default_icon": {
       "16": "images/T2-16.png",
       "32": "images/T2-32.png",
       "48": "images/T2-48.png",
       "128": "images/T2-128.png"
-        }
-   },
-  
+    }
+  },
   "icons": {
-      "16": "images/T2-16.png",
-      "32": "images/T2-32.png",
-      "48": "images/T2-48.png",
-      "128": "images/T2-128.png"
-    },
-    
-    "options_ui": {
-        "page": "/options/options.html",
-        "open_in_tab": false
-    },
-  
+    "16": "images/T2-16.png",
+    "32": "images/T2-32.png",
+    "48": "images/T2-48.png",
+    "128": "images/T2-128.png"
+  },
+  "options_ui": {
+    "page": "/options/options.html",
+    "open_in_tab": false
+  },
   "content_scripts": [
     {
-      "matches": ["*://smarttechnologies.my.salesforce.com/*", "*://smarttechnologies--c.na37.visual.force.com/*"],
-      "js": ["/Content_Scripts/setTemplate.js"],
+      "matches": [
+        "*://smarttechnologies.my.salesforce.com/*",
+        "*://smarttechnologies--c.na37.visual.force.com/*"
+      ],
+      "js": [
+        "/Content_Scripts/setTemplate.js"
+      ],
       "all_frames": true
     },
-	{
-	  "matches": ["*://smarttechnologies.my.salesforce.com/*", "*://smarttechnologies--c.na37.visual.force.com/*"],
-      "js": ["/Content_Scripts/getInputFields.js"],
+    {
+      "matches": [
+        "*://smarttechnologies.my.salesforce.com/*",
+        "*://smarttechnologies--c.na37.visual.force.com/*"
+      ],
+      "js": [
+        "/Content_Scripts/getInputFields.js"
+      ],
       "all_frames": true
-	}
-	],
+    }
+  ],
   "manifest_version": 2
 }

@@ -2,19 +2,18 @@
 
 var summaryHeight = "140px";
 
-chrome.runtime.sendMessage({command: "getSalesforceFields"},
-    function(response) {
+chrome.runtime.sendMessage({ command: "getSalesforceFields" },
+    function (response) {
         console.log("Sent request to background script for Salesforce field IDs");
-        if(response !== null) {
+        if (response !== null) {
             var formElements = {
                 callWrapSummary: document.getElementById(response.callWrapSummary),
                 commentText: document.getElementById(response.commentText),
                 emailTaskSummary: document.getElementById(response.taskSummary)
             };
             console.log("Received Salesforce field IDs");
-            chrome.storage.local.get("templateAutofill", function(currentState) {
-                if(currentState.templateAutofill === true)
-                {
+            chrome.storage.local.get("templateAutofill", function (currentState) {
+                if (currentState.templateAutofill === true) {
                     setTemplates(formElements);
                 }
             }
@@ -23,8 +22,7 @@ chrome.runtime.sendMessage({command: "getSalesforceFields"},
     }
 )
 
-function setTemplates(formElements)
-{
+function setTemplates(formElements) {
     //Set call wrap 
     if (formElements.callWrapSummary !== null && formElements.commentText !== null) {
         formElements.callWrapSummary.style.height = summaryHeight;
@@ -42,7 +40,7 @@ function setTemplates(formElements)
         if (formElements.emailTaskSummary.value === "") //check if field empty
         {
             formElements.emailTaskSummary.value = "T2 Elevation\nIB:\nOB:";
-            console.log("Set email template"); 
+            console.log("Set email template");
         }
     }
 };
