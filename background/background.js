@@ -110,8 +110,8 @@ function parseCaseNotes(notes)
     var summarySplit = templateRegex.exec(notes.callWrapNotes);
     if(summarySplit !== null)
     {
-        var agentInquiry = summarySplit[1].trim();
-        var tierTwoActionsTaken = summarySplit[2].trim();
+        var agentInquiry = summarySplit[1].trim().replace(/#/g, "%23");
+        var tierTwoActionsTaken = summarySplit[2].trim().replace(/#/g, "%23");
         var agentInquiryFormatted = agentInquiry.split(' ').join('+');
         var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
         var summary =
