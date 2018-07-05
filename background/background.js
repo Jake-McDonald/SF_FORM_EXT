@@ -62,8 +62,7 @@ function createFormURL(caseNotes, callback) {
             var agentName = trackerFields.tierOneName + "=" + caseNotes.tierOneAgentName;
             var agentNameFormatted = agentName.split(' ').join('+');
             //Add comment field (currently used for resource links) to the URL
-            var commentText = trackerFields.resourceProvided + "=" + caseNotes.commentText;
-            var commentTextFormatted = commentText.split(' ').join('+');
+            var commentText = trackerFields.resourceProvided + "=" + encodeURIComponent(caseNotes.commentText);
             //Add default outcome for consultations
             var outcome = trackerFields.outcome + "=" + "T1 continued call/email with support from T2";
             var outcomeFormmated = outcome.split(' ').join('+');
@@ -71,7 +70,7 @@ function createFormURL(caseNotes, callback) {
             var contactMethod = trackerFields.contactMethod + "=" + "Agent - Phone";
             var contactMethodFormatted = contactMethod.split(' ').join('+');
             //Push the entries to an array
-            entries.push(commentTextFormatted);
+            entries.push(commentText);
             entries.push(agentNameFormatted);
             entries.push(outcomeFormmated);
             entries.push(contactMethodFormatted);
@@ -100,15 +99,15 @@ function parseCaseNotes(notes) {
     var summarySplit = templateRegex.exec(notes.callWrapNotes);
     if(summarySplit !== null)
     {
-        var agentInquiry = summarySplit[1].trim().replace(/#/g, "%23");
-        var tierTwoActionsTaken = summarySplit[2].trim().replace(/#/g, "%23");
-        var agentInquiryFormatted = agentInquiry.split(' ').join('+');
-        var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
+        var agentInquiry = encodeURIComponent(summarySplit[1].trim());
+        var tierTwoActionsTaken = encodeURIComponent(summarySplit[2].trim());
+        //var agentInquiryFormatted = agentInquiry.split(' ').join('+');
+        //var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
         var summary =
         {
             unparsedSummary: notes,
-            agentInquiry: agentInquiryFormatted,
-            tierTwoActionsTaken: tierTwoActionsTakenFormatted
+            agentInquiry: agentInquiry,
+            tierTwoActionsTaken: tierTwoActionsTaken
         }
         return summary;
     }
