@@ -101,8 +101,6 @@ function parseCaseNotes(notes) {
     {
         var agentInquiry = encodeURIComponent(summarySplit[1].trim());
         var tierTwoActionsTaken = encodeURIComponent(summarySplit[2].trim());
-        //var agentInquiryFormatted = agentInquiry.split(' ').join('+');
-        //var tierTwoActionsTakenFormatted = tierTwoActionsTaken.split(' ').join('+');
         var summary =
         {
             unparsedSummary: notes,

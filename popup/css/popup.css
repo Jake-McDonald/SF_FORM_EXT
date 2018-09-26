@@ -1,10 +1,10 @@
 body {
         width:200px;
-        height:285px;
+        height:360px;
         background-color: #F5F5F5; /*White Smoke*/
 }
 .wrap {
-    display: inline-block;
+    display: block;
 }
 .mdl-button{
     width: 70%;
@@ -20,4 +20,21 @@ body {
 }
 .mdl-switch__label {
     font-size: 95%;
+}
+
+.mdl-radio__button {
+    width: 70%;
+}
+
+.mdl-radio__label {
+    font-size: 70%;
+}
+
+.radio-buttons {
+    margin-left: 35px;
+}
+
+#radio-group-label{
+    margin-left: 35px;
+    font-weight: bold;
 }
