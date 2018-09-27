@@ -16,6 +16,13 @@ function initButtons()
     switch2.addEventListener("change", function(){
         toggleSwitchState(this)}
     );
+    var radio = document.querySelector('#open-in-radio-group');
+    radio.addEventListener("click", (event) => {
+        if(event.target.tagName.toUpperCase() === "INPUT") {
+            let value = event.target.value;
+            saveOpenWithState(value);
+        }
+    });
 }
 function sendCallInfoToBackground()
 {
@@ -45,7 +52,6 @@ function toggleSwitchState(switchElement)
 function setToggleStates()
 {
     chrome.storage.local.get("templateAutofill", function(result) {
-        console.log(result.templateAutofill);
         if(result.templateAutofill === true)
         {
             switchOn(document.querySelector("#template"));
@@ -65,18 +71,37 @@ function setToggleStates()
         {
             switchOff(document.querySelector("#callForm"));
         }
-    }
+    })
+    chrome.storage.local.get("openMethod", (result => {
+        if(result.openMethod === "new-tab")
+        {
+            checkRadio(document.querySelector("#option-1"));
+            uncheckRadio(document.querySelector("#option-2"));
+        }
+        else
+        {
+            checkRadio(document.querySelector("#option-2"));
+            uncheckRadio(document.querySelector("#option-1"));
+        }
+    })
     )
 }
+function uncheckRadio(element)
+{
+    element.parentNode.MaterialRadio.uncheck();
+}
+function checkRadio(element)
+{
+    element.parentNode.MaterialRadio.check();
+}
+
 function switchOn(element)
 {
     element.MaterialSwitch.on();
-    console.log("Switched on!");
 }
 function switchOff(element)
 {
     element.MaterialSwitch.off();
-    console.log("Switched off!");
 }
 function saveSwitchState(switchElement, state)
 {
@@ -84,7 +109,6 @@ function saveSwitchState(switchElement, state)
     var switchState = {};
     switchState[switchName] = state;
     chrome.storage.local.set(switchState, function() {
-        console.log(switchName + " set to " + state + ".")
         }
     )
 }
@@ -95,4 +119,12 @@ function updateContentScripts()
         var tab = tabs[0];
         chrome.tabs.sendMessage(tab.id, {"command": "switchStatesUpdated"}, function (response) {
         })})
+}
+
+function saveOpenWithState(openWithState)
+{
+        let state = {};
+        let key = "openMethod";
+        state[key] = openWithState; 
+        chrome.storage.local.set(state, (event) => {console.log("State of open with saved")})
 }

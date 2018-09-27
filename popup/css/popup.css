@@ -27,14 +27,14 @@ body {
 }
 
 .mdl-radio__label {
-    font-size: 70%;
+    font-size: 80%;
 }
 
 .radio-buttons {
-    margin-left: 35px;
+    margin-left: 37px;
 }
 
 #radio-group-label{
-    margin-left: 35px;
+    margin-left: 37px;
     font-weight: bold;
 }
