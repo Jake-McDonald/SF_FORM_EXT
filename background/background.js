@@ -122,9 +122,28 @@ function parseCaseNotes(notes) {
     }
 }
 
-var launchForm = function (formUrl) {
+function launchForm(formUrl) {
+    chrome.storage.local.get("openMethod", (result) => {
+        if(result.openMethod === "new-tab")
+        {
+            launchNewTab(formUrl);
+        }
+        else
+        {
+            launchNewWindow(formUrl);
+        }
+    })
+}
+
+function launchNewTab(formUrl)
+{
     chrome.tabs.create({ url: formUrl });
 }
+function launchNewWindow(formUrl)
+{
+    chrome.windows.create({url: formUrl});
+}
+
 
 function popupHandler(request) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
