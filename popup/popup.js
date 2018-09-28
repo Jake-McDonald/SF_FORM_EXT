@@ -72,7 +72,7 @@ function setToggleStates()
             switchOff(document.querySelector("#callForm"));
         }
     })
-    chrome.storage.local.get("openMethod", (result => {
+    chrome.storage.local.get({openMethod: "new-tab"}, (result) => {
         if(result.openMethod === "new-tab")
         {
             checkRadio(document.querySelector("#option-1"));
@@ -84,7 +84,6 @@ function setToggleStates()
             uncheckRadio(document.querySelector("#option-1"));
         }
     })
-    )
 }
 function uncheckRadio(element)
 {
