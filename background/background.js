@@ -123,7 +123,7 @@ function parseCaseNotes(notes) {
 }
 
 function launchForm(formUrl) {
-    chrome.storage.local.get("openMethod", (result) => {
+    chrome.storage.local.get({"openMethod":"new-tab"} , (result) => {
         if(result.openMethod === "new-tab")
         {
             launchNewTab(formUrl);
